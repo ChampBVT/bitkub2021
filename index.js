@@ -29,7 +29,27 @@ const getAll = async (addr) => {
   if (walletLists.length > 0) getAll(temp);
   console.log('Address: ', addrs);
   console.table(table);
+  await getTransactionHistory(addrs);
   if (walletLists.length === 0) return walletSet;
+};
+
+const getTransactionHistory = async (addr) => {
+  // const history = await axios.get(`${URL}?module=account&action=tokentx&address=${addr}&startblock=0&endblock=999999999&sort=asc&apikey=${APIKEY}`);
+  // const filtered = history.data.result.filter((t) => (t.tokenSymbol === coin && t.from === address.toLowerCase()));
+  // const table = filtered.map((t) => ({
+  //   value: t.value / 10 ** 18,
+  //   hash: t.hash,
+  //   from: t.from,
+  //   to: t.to,
+  //   tokenSymbol: t.tokenSymbol,
+  // }));
+  // console.table(table);
+  // const walletFrom = filtered.map((t) => (t.from));
+  // const walletTo = filtered.map((t) => (t.to));
+  // const walletLists = walletTo.concat(walletFrom);
+  // const walletSet = new Set(walletLists);
+  const balance = await axios.get(`${URL}?module=account&action=balance&address=${addr}&tag=latest&apikey=${APIKEY}`).catch();
+  console.log(addr, balance.data.result / 10 ** 18);
 };
 
 // getTransactionHistory().then();
